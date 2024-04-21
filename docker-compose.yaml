@@ -1,0 +1,13 @@
+version: "2.1"
+
+services:
+  recibos.bot:
+    labels:
+      svc: "recibos.bot"
+    restart: always
+    container_name: recibos.bot
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000"
