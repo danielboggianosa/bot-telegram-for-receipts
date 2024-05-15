@@ -2,7 +2,6 @@ const {
     S3Client,
     PutObjectCommand,
 } = require("@aws-sdk/client-s3");
-const { DetectTextCommand, RekognitionClient } = require("@aws-sdk/client-rekognition");
 const fs = require("fs");
 const { envirionments } = require("./environments");
 
@@ -35,24 +34,4 @@ async function saveFileInRepository(filename, path) {
     }
 }
 
-// Función para detectar texto en una imagen
-async function recognizeTextInImage(imagePath) {
-    try {
-        const client = new RekognitionClient(awsConfig);
-        const imageBytes = fs.readFileSync(imagePath);
-        const params = {
-            Image: {
-                Bytes: imageBytes,
-            },
-        };
-        const command = new DetectTextCommand(params);
-        const result = await client.send(command)
-
-        return result.TextDetections.map(text => text.DetectedText);
-    } catch (error) {
-        console.error("Error al detectar texto:", error);
-        throw error;
-    }
-}
-
-module.exports = { recognizeTextInImage, saveFileInRepository };
+module.exports = { saveFileInRepository };
