@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 const fs = require("fs");
 const { envirionments } = require("./environments");
-const { recognizeTextInImage, saveFileInRepository } = require("./aws.services");
+const { saveFileInRepository } = require("./aws.services");
 const { generateJSONFromReceipt } = require("./open-ai.services");
 const { saveReceiptInfo } = require("./mongodb");
 const { randomUUID } = require("crypto");
@@ -23,35 +23,32 @@ async function analyzeImageService(ctx) {
 
         fs.writeFileSync(path, fileStream);
 
-        const textInPhoto = await recognizeTextInImage(path);
         const { caption } = ctx.message
 
         let response = "No se ha reconocido el texto en la imagen";
 
-        if (textInPhoto) {
-            const {
-                success,
-                data_in_text,
-                ...rest
-            } = await generateJSONFromReceipt(
-                textInPhoto,
-                caption
-            );
+        const {
+            success,
+            data_in_text,
+            ...rest
+        } = await generateJSONFromReceipt(
+            path,
+            caption
+        );
 
-            const image_key = await saveFileInRepository(filename, path);
+        const image_key = await saveFileInRepository(filename, path);
 
-            receipt = {
-                success,
-                ...rest,
-                image_key,
-            };
+        receipt = {
+            success,
+            ...rest,
+            image_key,
+        };
 
-            if (success && data_in_text) {
-                await saveReceiptInfo({ id, ...receipt })
-                response = `ID: ${id}
-                ${data_in_text}
-                `;
-            }
+        if (success && data_in_text) {
+            await saveReceiptInfo({ id, ...receipt })
+            response = `ID: ${id}
+            ${data_in_text}
+            `;
         }
 
         ctx.reply(response);
