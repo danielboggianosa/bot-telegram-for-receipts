@@ -97,6 +97,7 @@ async function generateJSONFromReceipt(imagePath, caption) {
             - Siempre que los pagos sean de yape, plim o transferencia, el nombre de la persona que aparece, es el dueño del store.
             - No completes el nombre del cliente con el nombre del store o cajero.
             - Si es una imagen de transferencia en la parte de descripción o notas siempre encontrarás detalles de los productos (items) o del cliente.
+            - Debes responder con un objeto json, remueve todos los comentarios como este "// ... otros artículos si los hay", que esten dentro del esquema, esto impide parsear el objeto.
             - NO incluyas markdown "\`\`\`" o "\`\`\`json" al principio o al final.
             `;
     const response = await openai.chat.completions.create({
