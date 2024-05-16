@@ -44,7 +44,7 @@ async function analyzeImageService(ctx) {
             image_key,
         };
 
-        if (success && data_in_text) {
+        if (success) {
             await saveReceiptInfo({ id, ...receipt })
             response = `ID: ${id}
             ${data_in_text}
