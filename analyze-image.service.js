@@ -3,7 +3,7 @@ const fs = require("fs");
 const { envirionments } = require("./environments");
 const { saveFileInRepository } = require("./aws.services");
 const { generateJSONFromReceipt } = require("./open-ai.services");
-const { saveReceiptInfo } = require("./mongodb");
+const { saveReceiptInfo } = require("./src/repositories/receipt.repository");
 const { randomUUID } = require("crypto");
 
 async function analyzeImageService(ctx) {

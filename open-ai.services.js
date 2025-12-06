@@ -29,7 +29,8 @@ async function generateJSONFromReceipt(imagePath, caption) {
                 "address": "[Dirección de la tienda]",
                 "city": "[Ciudad]",
                 "country": "[País]",
-                "telephone": "[Número de teléfono de la tienda]"
+                "telephone": "[Número de teléfono de la tienda]",
+                "website": "[Sitio web de la tienda]",
               },
               "invoice": {
                 "invoice_type": "[Boleta o Factura]",
@@ -77,7 +78,6 @@ async function generateJSONFromReceipt(imagePath, caption) {
                 "condition": "[Condición de los productos para la devolución]",
                 "restrictions": "[Restricciones y condiciones]"
               },
-              "website": "[Sitio web de la tienda]",
               "category": "[Categoría de gastos]",
               "subcategory": "[Categoría de gastos]",
               "data_in_text": "[Texto completo de la factura en clave:valor separado por saltos de línea]"
@@ -98,6 +98,7 @@ async function generateJSONFromReceipt(imagePath, caption) {
             - No completes el nombre del cliente con el nombre del store o cajero.
             - Si es una imagen de transferencia en la parte de descripción o notas siempre encontrarás detalles de los productos (items) o del cliente.
             - Debes responder con un objeto json, remueve todos los comentarios como este "// ... otros artículos si los hay", que esten dentro del esquema, esto impide parsear el objeto.
+            - Vas a agregar una categoría y subcategoría para cada recibo, esto lo determinarás según la descripción de los productos o por la tienda de proveniencia
             - NO incluyas markdown "\`\`\`" o "\`\`\`json" al principio o al final.
             `;
     const response = await openai.chat.completions.create({
@@ -129,6 +130,10 @@ async function generateJSONFromReceipt(imagePath, caption) {
     return receiptDTO(response.choices[0].message.content);
   } catch (error) {
     console.error(error);
+    return {
+      success: false,
+      error: error.message
+    }
   }
 }
 

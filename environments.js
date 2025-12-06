@@ -18,6 +18,7 @@ const envirionments = {
     mongoDBPort: process.env.MONGODB_PORT,
     mongoDBDatabase: process.env.MONGODB_DATABASE,
     mongoDBCollection: process.env.MONGODB_COLLECTION,
+    port: Number(process.env.API_PORT)
 }
 
 module.exports = { envirionments }
